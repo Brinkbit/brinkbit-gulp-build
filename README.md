@@ -3,7 +3,7 @@
 *IMPORTANT DISCLAIMER!*
 
 This a growing / ongoing collection of generalized gulp build tasks for Brinkbit.
-Though they're gulp tasks, this sort of pre-configured set of tasks is decided not gulpy.
+Though they're gulp tasks, this sort of pre-configured set of tasks is decidedly not gulpy.
 These are designed to be super simple plug-and-play experiences with very minimal customization.
 We want consistency in our organization for how we build things,
 and these are designed with consistency and minimal flexibility in mind rather than customization.
