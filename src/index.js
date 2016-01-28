@@ -24,7 +24,7 @@ function mapJs( src ) {
                             entry,
                             R.merge({}, watchify.args, { debug: true })
                         )
-                    ).transform( babel.configure({ presets: ['es2015'] }), { global: true });
+                    ).transform( babel.configure({ presets: ['es2015'] }), { global: true, sourceMaps: true });
 
                     function bundle() {
                         b.bundle()
@@ -63,7 +63,7 @@ function concatJs( src, dest, filename ) {
                     entries,
                     R.merge({}, watchify.args, { debug: true })
                 )
-            ).transform( babel.configure({ presets: ['es2015'] }), { global: true });
+            ).transform( babel.configure({ presets: ['es2015'] }), { global: true, sourceMaps: true });
 
             function bundle() {
                 b.bundle()
