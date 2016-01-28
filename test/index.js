@@ -34,6 +34,7 @@ describe( '#buildJs', function() {
         });
 
         it( 'should preserve file structure for globs', function() {
+            this.timeout( 5000 );
             return brinkbuild.buildJs( 'testFiles/multiple/**/*.js' )
             .then(() => expect( resourcesExist( testFiles )).to.eventually.be.true );
         });

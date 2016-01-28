@@ -40,7 +40,8 @@ gulp.task( 'many to one', () => brinkbuild.buildJs( 'src/**/*.js', 'dest', 'onef
 ## Testing
 
 `npm install -g gulp`
-`npm run test`
+
+`npm test`
 
 ## Contributing
 
