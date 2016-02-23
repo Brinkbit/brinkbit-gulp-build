@@ -62,16 +62,27 @@ describe( '#buildJs', function() {
             'testFiles/watch.min.js.map',
         ];
 
+        before( function() {
+            return fs.copyAsync( 'testFiles/watch.js', 'testFiles/temp/watch.js', {});
+        });
+
         after( function() {
-            return Promise.all( testFiles.map( path => fs.removeAsync( path )));
+            return Promise.all(
+                testFiles.map( path => fs.removeAsync( path ))
+                .concat( fs.moveAsync( 'testFiles/temp/watch.js', 'testFiles/watch.js', { clobber: true })
+                    .then(() => fs.removeAsync( 'testFiles/temp' ))
+                )
+            );
         });
 
         it( 'should automatically rebuild files on changes', function() {
+            this.timeout( 3000 );
             return brinkbuild.buildJs( 'testFiles/watch.js', 'testFiles', 'watch.min.js' )
             .then(() => expect( resourcesExist( testFiles )).to.eventually.be.true )
             .then(() => Promise.all( testFiles.map( path => fs.removeAsync( path ))))
-            // not sure why this doesn't trigger a rebuild, may be related to https://github.com/substack/watchify/issues/216
-            .then(() => fs.appendFileAsync( 'testFiles/watch.js', '', {}))
+            .then(() => new Promise( resolve => setTimeout( resolve, 1000 )))
+            .then(() => fs.appendFileAsync( 'testFiles/watch.js', ' ', {}))
+            .then(() => new Promise( resolve => setTimeout( resolve, 1000 )))
             .then(() => expect( resourcesExist( testFiles )).to.eventually.be.true );
         });
     });

@@ -23,8 +23,12 @@ function mapJs( src ) {
                         browserify(
                             entry,
                             R.merge({}, watchify.args, { debug: true })
-                        )
-                    ).transform( babel.configure({ presets: ['es2015'] }), { global: true });
+                        ),
+                        {
+                            ignoreWatch: true,
+                            poll: true,
+                        }
+                    ).transform( babel.configure({ presets: ['es2015'] }), { global: true, sourceMaps: true });
 
                     function bundle() {
                         b.bundle()
@@ -47,7 +51,10 @@ function mapJs( src ) {
                         .on( 'end', resolve );
                     }
 
-                    b.on( 'update', bundle );
+                    b.on( 'update', () => {
+                        console.log( 'rebuilding javascript' ); // eslint-disable-line no-console
+                        bundle();
+                    });
                     bundle();
                 })
             )
@@ -62,8 +69,12 @@ function concatJs( src, dest, filename ) {
                 browserify(
                     entries,
                     R.merge({}, watchify.args, { debug: true })
-                )
-            ).transform( babel.configure({ presets: ['es2015'] }), { global: true });
+                ),
+                {
+                    ignoreWatch: true,
+                    poll: true,
+                }
+            ).transform( babel.configure({ presets: ['es2015'] }), { global: true, sourceMaps: true });
 
             function bundle() {
                 b.bundle()
