@@ -31,8 +31,29 @@ Transpile and uglify es6 to es5, watching for changes:
 const gulp = require( 'gulp' );
 const brinkbuild = require( 'brinkbit-gulp-build' );
 
-gulp.task( 'many to many', () => brinkbuild.buildJs([ 'src/**/*.js', 'test/**/*.js' ]));
-gulp.task( 'many to one', () => brinkbuild.buildJs( 'src/**/*.js', 'dest', 'onefile.min.js' ));
+gulp.task( 'many to many', () => brinkbuild.watchEs6([ 'src/es6/**/*.js', 'test/es6/**/*.js' ]));
+gulp.task( 'many to one', () => brinkbuild.watchEs6( 'src/es6/**/*.js', 'dest/es6', 'onefile.min.js' ));
+```
+
+Transpile and uglify es6 to es5, WITHOUT watching for changes:
+
+```javascript
+gulp.task( 'many to many', () => brinkbuild.buildEs6([ 'src/es6/**/*.js', 'test/es6/**/*.js' ]));
+gulp.task( 'many to one', () => brinkbuild.buildEs6( 'src/es6/**/*.js', 'dest/es6', 'onefile.min.js' ));
+```
+
+Concat and uglify es5 code:
+
+```javascript
+gulp.task( 'many to many', () => brinkbuild.buildEs5([ 'src/es5/**/*.js', 'test/es5/**/*.js' ]));
+gulp.task( 'many to one', () => brinkbuild.buildEs5( 'src/es5/**/*.js', 'dest/es5', 'onefile.min.js' ));
+```
+
+Concat and uglify less:
+
+```javascript
+gulp.task( 'many to many', () => brinkbuild.buildLess([ 'src/less/**/*.less', 'test/less/**/*.less' ]));
+gulp.task( 'many to one', () => brinkbuild.buildLess( 'src/less/**/*.less', 'dest/less', 'onefile.min.css' ));
 ```
 
 ... more tasks to come
