@@ -60,9 +60,17 @@ gulp.task( 'many to one', () => brinkbuild.buildLess( 'src/less/**/*.less', 'des
 
 ## Testing
 
-`npm install -g gulp`
+```
+npm install -g gulp
+npm test
+```
 
-`npm test`
+Test in docker (cause stuff sometimes breaks in virtualized environments)
+
+```
+docker build -t gulp-build .
+docker run gulp-build
+```
 
 ## Contributing
 
