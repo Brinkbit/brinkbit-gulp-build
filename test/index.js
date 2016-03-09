@@ -190,6 +190,23 @@ describe( '#buildEs5', function() {
             return brinkbuild.buildEs5( 'testFiles/es5/multiple/**/*.js', 'testFiles/es5', 'single.min.js' )
             .then(() => expect( resourcesExist( testFiles )).to.eventually.be.true );
         });
+
+        it( 'should handle an array of paths', function() {
+            const testFiles = [
+                'testFiles/es5/single.min.js',
+                'testFiles/es5/single.min.js.map',
+            ];
+
+            after( function() {
+                // return Promise.all( testFiles.map( path => fs.removeAsync( path )));
+            });
+
+            return brinkbuild.buildEs5([
+                'testFiles/es5/multiple/deep/inner.js',
+                'testFiles/es5/multiple/outer.js',
+            ], 'testFiles/es5', 'single.min.js' )
+            .then(() => expect( resourcesExist( testFiles )).to.eventually.be.true );
+        });
     });
 });
 
