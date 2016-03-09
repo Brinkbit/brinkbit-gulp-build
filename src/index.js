@@ -11,6 +11,7 @@ const sourcemaps = require( 'gulp-sourcemaps' );
 const uglify = require( 'gulp-uglify' );
 const rename = require( 'gulp-rename' );
 const gulp = require( 'gulp' );
+const newer = require( 'gulp-newer' );
 const print = require( 'gulp-print' );
 const concat = require( 'gulp-concat' );
 const LessPluginCleanCSS = require( 'less-plugin-clean-css' );
@@ -131,14 +132,16 @@ function concatEs6Js( watch, src, dest, filename ) {
 
 function mapEs5Js( src, dest ) {
     return new Promise(( resolve, reject ) => {
-        gulp.src( src ).pipe( sourcemaps.init())
+        gulp.src( src )
+        .pipe( rename( path => {
+            path.extname = '.min.js';
+        }))
+        .pipe( newer( dest ))
+        .pipe( sourcemaps.init())
         .pipe( print( filepath => {
             return `building '${filepath}'`;
         }))
         .pipe( uglify())
-        .pipe( rename( path => {
-            path.extname = '.min.js';
-        }))
         .pipe( sourcemaps.write( './' ))
         .pipe( gulp.dest( dest ))
         .pipe( print( filepath => {
@@ -152,6 +155,7 @@ function mapEs5Js( src, dest ) {
 function concatEs5Js( src, dest, filename ) {
     return new Promise(( resolve, reject ) => {
         return gulp.src( src )
+        .pipe( newer( `${dest}/${filename}` ))
         .pipe( sourcemaps.init())
         .pipe( concat( filename ))
         .pipe( print( filepath => {
@@ -186,20 +190,30 @@ module.exports.buildEs5 = ( src, dest, filename ) => {
 
 module.exports.buildLess = ( src, dest, filename ) => new Promise(( resolve, reject ) => {
     let stream = gulp.src( src )
-    .on( 'error', reject )
-    .pipe( print( filepath => {
-        return `building '${filepath}'`;
-    }))
-    .pipe( less({
-        plugins: [cleancss],
-    }));
+    .on( 'error', reject );
 
     if ( filename ) {
-        stream = stream.pipe( concat( filename ));
+        stream = stream
+        .pipe( newer( `${dest}/${filename}` ))
+        .pipe( less({
+            plugins: [cleancss],
+        }))
+        .pipe( concat( filename ))
+        .pipe( print( filepath => {
+            return `building '${filepath}'`;
+        }));
     }
     else {
-        stream = stream.pipe( rename( path => {
+        stream = stream
+        .pipe( rename( path => {
             path.extname = '.min.css';
+        }))
+        .pipe( newer( dest ))
+        .pipe( print( filepath => {
+            return `building '${filepath}'`;
+        }))
+        .pipe( less({
+            plugins: [cleancss],
         }));
     }
 

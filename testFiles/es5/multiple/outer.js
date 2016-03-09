@@ -1,6 +1,6 @@
 'use strict';
 
-window.innerFunction = ( function outer() {
+window.outerFunction = ( function outer() {
     var outerFunction = function outerFunction() {
         return '';
     };
